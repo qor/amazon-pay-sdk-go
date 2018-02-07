@@ -24,6 +24,48 @@ type AuthorizeInput struct {
 }
 
 // Authorize process secures the funds specified for the payment method stored in the Order Reference.
-func (amazonPay *AmazonPay) Authorize(orderReferenceID string, authReferenceID string, amount Price) AuthorizationDetails {
+func (amazonPay *AmazonPay) Authorize(orderReferenceID string, transactionID string, amount Price, input AuthorizeInput) AuthorizationDetails {
 	return AuthorizationDetails{}
+}
+
+// GetAuthorizationDetails returns the total authorized amount for authorization status and authorization.
+func (amazonPay *AmazonPay) GetAuthorizationDetails(authorizationID string) AuthorizationDetails {
+	return AuthorizationDetails{}
+}
+
+// CaptureInput capture input struct
+type CaptureInput struct {
+	SellerCaptureNote string
+	SoftDecriptor     string
+}
+
+// Capture request funds from the authorized payment method.
+func (amazonPay *AmazonPay) Capture(authorizationID string, transactionID string, captureAmount Price, input CaptureInput) CaptureDetails {
+	return CaptureDetails{}
+}
+
+// GetCaptureDetails returns the detailed sales request status and the total amount refunded by sales request.
+func (amazonPay *AmazonPay) GetCaptureDetails(captureID string) CaptureDetails {
+	return CaptureDetails{}
+}
+
+// CloseOrderReference complete order reference and will not be able to generate a new authorization from this Order Reference.
+func (amazonPay *AmazonPay) CloseOrderReference(orderReferenceID string, closeReason string) error {
+	return nil
+}
+
+// RefundInput refund input struct
+type RefundInput struct {
+	SellerRefundNote string
+	SoftDescriptor   string
+}
+
+// Refund refund the funds requested
+func (amazonPay *AmazonPay) Refund(captureID string, transactionID string, refundAmount Price, input RefundInput) RefundDetails {
+	return RefundDetails{}
+}
+
+// GetRefundDetails get refund details
+func (amazonPay *AmazonPay) GetRefundDetails(refundID string) RefundDetails {
+	return RefundDetails{}
 }
