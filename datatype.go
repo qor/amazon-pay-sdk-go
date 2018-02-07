@@ -15,6 +15,23 @@ type Address struct {
 	Phone                                    string
 }
 
+// AuthorizationDetails details and status of the authorization object, including sales charge amount.
+type AuthorizationDetails struct {
+	AmazonAuthorizationID    string
+	AuthorizationReferenceID string
+	SellerAuthorizationNote  string
+	AuthorizationAmount      Price
+	CaptureAmount            Price
+	AuthorizationFee         Price
+	IDList                   string
+	CreationTimestamp        *time.Time
+	ExpirationTimestamp      *time.Time
+	AuthorizationStatus      Status
+	SoftDecline              bool
+	CaptureNow               bool
+	SoftDescriptor           string
+}
+
 // Buyer buyer info
 type Buyer struct {
 	Name  string
