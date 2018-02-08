@@ -9,7 +9,7 @@ func (amazonPay *AmazonPay) SetOrderReferenceDetails(orderReferenceID string, at
 		"AmazonOrderReferenceId": orderReferenceID,
 	}
 
-	err := updateParams(&params, attrs)
+	err := updateParams(&params, "OrderReferenceAttributes", attrs)
 
 	if err == nil {
 		err = amazonPay.Post(params)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func updateParams(params *Params, value interface{}) error {
+func updateParams(params *Params, namespace string, value interface{}) error {
 	resultMap := map[string]interface{}{}
 
 	result, err := json.Marshal(value)
@@ -35,7 +35,11 @@ func updateParams(params *Params, value interface{}) error {
 	}
 
 	for key, value := range resultMap {
-		addToParam(key, value)
+		if namespace != "" {
+			addToParam(fmt.Sprintf("%v.%v", namespace, key), value)
+		} else {
+			addToParam(key, value)
+		}
 	}
 
 	return nil
