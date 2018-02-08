@@ -14,7 +14,7 @@ var Client = New(&Config{
 })
 
 func TestSetOrderReferenceDetails(t *testing.T) {
-	data := Client.SetOrderReferenceDetails("orderReferenceID", OrderReferenceAttributes{
+	data, err := Client.SetOrderReferenceDetails("orderReferenceID", OrderReferenceAttributes{
 		OrderTotal: OrderTotal{
 			CurrencyCode: "usd",
 			Amount:       "100",
@@ -29,4 +29,5 @@ func TestSetOrderReferenceDetails(t *testing.T) {
 	})
 
 	fmt.Printf("%#v\n", data)
+	fmt.Println(err)
 }
