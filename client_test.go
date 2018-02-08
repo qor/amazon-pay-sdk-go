@@ -10,6 +10,7 @@ var Client = New(&Config{
 	AccessKey:  "test",
 	SecretKey:  "test",
 	Sandbox:    true,
+	Region:     "jp",
 })
 
 func TestSetOrderReferenceDetails(t *testing.T) {

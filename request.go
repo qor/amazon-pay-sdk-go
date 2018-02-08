@@ -48,15 +48,13 @@ func (amazonPay *AmazonPay) Post(params Params) error {
 		Path:   path.Join(amazonPay.Config.ModePath, amazonPay.Config.APIVersion),
 	}
 
-	req, err := http.NewRequest("POST", URL.String(), strings.NewReader(amazonPay.buildPostURL(params)))
-	req.Header.Set("Content-Type", "x-www-form-urlencoded")
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", fmt.Sprintf("amazon-pay-sdk-go/%v", amazonPay.Config.APIVersion))
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := http.Post(URL.String(), "application/x-www-form-urlencoded", strings.NewReader(amazonPay.buildPostURL(params)))
 
 	var data []byte
 	if err == nil {
+		defer resp.Body.Close()
 		data, err = ioutil.ReadAll(resp.Body)
+		fmt.Println("====== result")
 		fmt.Println(amazonPay.buildPostURL(params))
 		fmt.Println(URL.String())
 		fmt.Println(string(data))
@@ -76,8 +74,8 @@ func (amazonPay *AmazonPay) buildPostURL(params Params) string {
 	}
 
 	sort.Strings(apiParams)
-	postURL := strings.Join(apiParams, "\n&")
-	postURL += "\n&Signature=" + amazonPay.Sign(strings.Join([]string{"POST", amazonPay.Config.Endpoint, fmt.Sprintf("/%v/%v", amazonPay.Config.ModePath, amazonPay.Config.APIVersion), postURL}, "\n"))
+	postURL := strings.Join(apiParams, "&")
+	postURL += "&Signature=" + amazonPay.Sign(strings.Join([]string{"POST", amazonPay.Config.Endpoint, fmt.Sprintf("/%v/%v", amazonPay.Config.ModePath, amazonPay.Config.APIVersion), postURL}, "\n"))
 	return postURL
 }
 
@@ -86,5 +84,5 @@ func (amazonPay *AmazonPay) Sign(message string) string {
 	key := []byte(amazonPay.Config.SecretKey)
 	h := hmac.New(sha256.New, key)
 	h.Write([]byte(message))
-	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+	return strings.TrimRight(base64.StdEncoding.EncodeToString(h.Sum(nil)), "=")
 }
