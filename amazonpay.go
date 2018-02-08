@@ -39,8 +39,12 @@ func New(config *Config) *AmazonPay {
 		config = &Config{}
 	}
 
+	if region, ok := RegionMappings[config.Region]; ok {
+		config.Region = region
+	}
+
 	if config.Region == "" {
-		config.Region = "us"
+		config.Region = "na"
 	}
 
 	if config.Endpoint == "" {

@@ -48,6 +48,9 @@ func (amazonPay *AmazonPay) Post(params Params) error {
 		Path:   path.Join(amazonPay.Config.ModePath, amazonPay.Config.APIVersion),
 	}
 
+	fmt.Println(amazonPay.buildPostURL(params))
+	fmt.Println(URL.String())
+
 	resp, err := http.Post(URL.String(), "application/json", strings.NewReader(amazonPay.buildPostURL(params)))
 
 	var data []byte

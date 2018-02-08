@@ -1,7 +1,21 @@
 package amazonpay
 
+import "fmt"
+
 // SetOrderReferenceDetails set order details such as order amount and explanation in Order Reference
 func (amazonPay *AmazonPay) SetOrderReferenceDetails(orderReferenceID string, attrs OrderReferenceAttributes) OrderReferenceAttributes {
+	var params = Params{
+		"Action":                 "SetOrderReferenceDetails",
+		"AmazonOrderReferenceId": orderReferenceID,
+	}
+
+	err := updateParams(&params, attrs)
+
+	if err == nil {
+		err = amazonPay.Post(params)
+	}
+
+	fmt.Println(err)
 	return OrderReferenceAttributes{}
 }
 
