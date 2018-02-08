@@ -5,14 +5,17 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"net/url"
+	"path"
 	"sort"
 	"strings"
 	"time"
 )
 
 // Post post API info
-func (amazonPay *AmazonPay) Post(path string, params Params) error {
+func (amazonPay *AmazonPay) Post(params Params) error {
 	if _, ok := params.Get("AWSAccessKeyId"); !ok {
 		params.Set("AWSAccessKeyId", amazonPay.Config.AccessKey)
 	}
@@ -39,8 +42,22 @@ func (amazonPay *AmazonPay) Post(path string, params Params) error {
 		params.Set("Version", "2013-01-01")
 	}
 
+	URL := url.URL{
+		Scheme: "https",
+		Host:   amazonPay.Config.Endpoint,
+		Path:   path.Join(amazonPay.Config.ModePath, amazonPay.Config.APIVersion),
+	}
+
+	resp, err := http.Post(URL.String(), "application/json", strings.NewReader(amazonPay.buildPostURL(params)))
+
+	var data []byte
+	if err == nil {
+		data, err = ioutil.ReadAll(resp.Body)
+		fmt.Println("==========")
+		fmt.Println(string(data))
+	}
 	// retry
-	return nil
+	return err
 }
 
 // buildPostURL build post URL
