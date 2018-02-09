@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -14,8 +15,20 @@ import (
 	"time"
 )
 
+// APIError Amazon Pay API Error definition
+type APIError struct {
+	XMLName xml.Name `xml:"ErrorResponse"`
+	Type    string   `xml:"Error>Type"`
+	Code    string   `xml:"Error>Code"`
+	Message string   `xml:"Error>Message"`
+}
+
+func (apiError APIError) Error() string {
+	return apiError.Message
+}
+
 // Post post API info
-func (amazonPay *AmazonPay) Post(params Params) error {
+func (amazonPay *AmazonPay) Post(params Params, response interface{}) error {
 	if _, ok := params.Get("AWSAccessKeyId"); !ok {
 		params.Set("AWSAccessKeyId", amazonPay.Config.AccessKey)
 	}
@@ -54,12 +67,18 @@ func (amazonPay *AmazonPay) Post(params Params) error {
 	if err == nil {
 		defer resp.Body.Close()
 		data, err = ioutil.ReadAll(resp.Body)
-		fmt.Println("====== result")
-		fmt.Println(amazonPay.buildPostURL(params))
-		fmt.Println(URL.String())
-		fmt.Println(string(data))
+		if resp.StatusCode == 200 {
+			if response != nil {
+				err = xml.Unmarshal([]byte(data), response)
+			}
+		} else {
+			var apiError APIError
+			if err = xml.Unmarshal([]byte(data), &apiError); err == nil {
+				return apiError
+			}
+		}
 	}
-	// retry
+
 	return err
 }
 

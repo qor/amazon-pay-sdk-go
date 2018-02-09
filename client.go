@@ -10,7 +10,7 @@ func (amazonPay *AmazonPay) SetOrderReferenceDetails(orderReferenceID string, at
 	err = updateParams(&params, "OrderReferenceAttributes", attrs)
 
 	if err == nil {
-		err = amazonPay.Post(params)
+		err = amazonPay.Post(params, &result)
 	}
 
 	return result, err
@@ -23,7 +23,7 @@ func (amazonPay *AmazonPay) ConfirmOrderReference(orderReferenceID string) error
 		"AmazonOrderReferenceId": orderReferenceID,
 	}
 
-	return amazonPay.Post(params)
+	return amazonPay.Post(params, nil)
 }
 
 // GetOrderReferenceDetails Returns the details and current state of the Order Reference object.
@@ -33,7 +33,7 @@ func (amazonPay *AmazonPay) GetOrderReferenceDetails(orderReferenceID string, ad
 		"AmazonOrderReferenceId": orderReferenceID,
 	}
 
-	err = amazonPay.Post(params)
+	err = amazonPay.Post(params, &result)
 
 	return result, err
 }
@@ -57,7 +57,7 @@ func (amazonPay *AmazonPay) Authorize(orderReferenceID string, transactionID str
 	updateParams(&params, "AuthorizationAmount", amount)
 	updateParams(&params, "", input)
 
-	err = amazonPay.Post(params)
+	err = amazonPay.Post(params, &result)
 
 	return result, err
 }
@@ -69,7 +69,7 @@ func (amazonPay *AmazonPay) GetAuthorizationDetails(authorizationID string) (res
 		"AmazonAuthorizationId": authorizationID,
 	}
 
-	err = amazonPay.Post(params)
+	err = amazonPay.Post(params, &result)
 
 	return result, err
 }
@@ -91,7 +91,7 @@ func (amazonPay *AmazonPay) Capture(authorizationID string, transactionID string
 	updateParams(&params, "CaptureAmount", captureAmount)
 	updateParams(&params, "", input)
 
-	err = amazonPay.Post(params)
+	err = amazonPay.Post(params, &result)
 
 	return result, err
 }
@@ -103,7 +103,7 @@ func (amazonPay *AmazonPay) GetCaptureDetails(captureID string) (result CaptureD
 		"AmazonCaptureId": captureID,
 	}
 
-	err = amazonPay.Post(params)
+	err = amazonPay.Post(params, &result)
 	return result, err
 }
 
@@ -115,7 +115,7 @@ func (amazonPay *AmazonPay) CloseOrderReference(orderReferenceID string, closure
 		"ClosureReason":          closureReason,
 	}
 
-	return amazonPay.Post(params)
+	return amazonPay.Post(params, nil)
 }
 
 // RefundInput refund input struct
@@ -135,7 +135,7 @@ func (amazonPay *AmazonPay) Refund(captureID string, transactionID string, refun
 	updateParams(&params, "RefundAmount", refundAmount)
 	updateParams(&params, "", input)
 
-	err = amazonPay.Post(params)
+	err = amazonPay.Post(params, &result)
 
 	return result, err
 }
@@ -147,6 +147,6 @@ func (amazonPay *AmazonPay) GetRefundDetails(refundID string) (result RefundDeta
 		"AmazonRefundId": refundID,
 	}
 
-	err = amazonPay.Post(params)
+	err = amazonPay.Post(params, &result)
 	return result, err
 }
