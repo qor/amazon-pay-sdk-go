@@ -46,7 +46,7 @@ func (amazonPay *AmazonPay) Post(params Params, response interface{}) error {
 	}
 
 	if _, ok := params.Get("Timestamp"); !ok {
-		params.Set("Timestamp", time.Now().UTC().Format("2006-01-02T03:04:05Z"))
+		params.Set("Timestamp", time.Now().UTC().Format("2006-01-02T15:04:05Z"))
 	}
 
 	params.Set("Signature", params.Sign())
