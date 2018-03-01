@@ -1,6 +1,85 @@
 package amazonpay
 
-import "time"
+import (
+	"time"
+)
+
+////////////////////////////////////////////////////////////////////////////////
+// Response Types
+////////////////////////////////////////////////////////////////////////////////
+
+// ResponseMetadata respones meta data
+type ResponseMetadata struct {
+	RequestID string `xml:"RequestId"`
+}
+
+// SetOrderReferenceDetailsResult set order reference detail
+type SetOrderReferenceDetailsResult struct {
+	SetOrderReferenceDetailsResult struct {
+		OrderReferenceDetails OrderReferenceDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// GetOrderReferenceDetailsResponse details and current state of the Order Reference object.
+type GetOrderReferenceDetailsResponse struct {
+	GetOrderReferenceDetailsResult struct {
+		OrderReferenceDetails OrderReferenceDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// AuthorizeResponse authorize response
+type AuthorizeResponse struct {
+	AuthorizeResult struct {
+		AuthorizationDetails AuthorizationDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// GetAuthorizationDetailsResponse get authorization detail response
+type GetAuthorizationDetailsResponse struct {
+	GetAuthorizationDetailsResult struct {
+		AuthorizationDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// CaptureResponse capture response
+type CaptureResponse struct {
+	CaptureResult struct {
+		CaptureDetails CaptureDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// GetCaptureDetailsResponse get capture details response
+type GetCaptureDetailsResponse struct {
+	GetCaptureDetailsResult struct {
+		CaptureDetails CaptureDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// RefundResponse get refund response
+type RefundResponse struct {
+	RefundResult struct {
+		RefundDetails RefundDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// GetRefundDetailsResponse get refund detail response
+type GetRefundDetailsResponse struct {
+	GetRefundDetailsResult struct {
+		RefundDetails RefundDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Data Types
+////////////////////////////////////////////////////////////////////////////////
 
 // Address postal address information
 type Address struct {

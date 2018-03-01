@@ -1,7 +1,7 @@
 package amazonpay
 
 // SetOrderReferenceDetails set order details such as order amount and explanation in Order Reference
-func (amazonPay *AmazonPay) SetOrderReferenceDetails(orderReferenceID string, attrs OrderReferenceAttributes) (result OrderReferenceAttributes, err error) {
+func (amazonPay *AmazonPay) SetOrderReferenceDetails(orderReferenceID string, attrs OrderReferenceAttributes) (result SetOrderReferenceDetailsResult, err error) {
 	var params = Params{
 		"Action":                 "SetOrderReferenceDetails",
 		"AmazonOrderReferenceId": orderReferenceID,
@@ -27,7 +27,7 @@ func (amazonPay *AmazonPay) ConfirmOrderReference(orderReferenceID string) error
 }
 
 // GetOrderReferenceDetails Returns the details and current state of the Order Reference object.
-func (amazonPay *AmazonPay) GetOrderReferenceDetails(orderReferenceID string, addressToken string) (result OrderReferenceDetails, err error) {
+func (amazonPay *AmazonPay) GetOrderReferenceDetails(orderReferenceID string, addressToken string) (result GetOrderReferenceDetailsResponse, err error) {
 	var params = Params{
 		"Action":                 "GetOrderReferenceDetails",
 		"AmazonOrderReferenceId": orderReferenceID,
@@ -47,7 +47,7 @@ type AuthorizeInput struct {
 }
 
 // Authorize process secures the funds specified for the payment method stored in the Order Reference.
-func (amazonPay *AmazonPay) Authorize(orderReferenceID string, transactionID string, amount Price, input AuthorizeInput) (result AuthorizationDetails, err error) {
+func (amazonPay *AmazonPay) Authorize(orderReferenceID string, transactionID string, amount Price, input AuthorizeInput) (result AuthorizeResponse, err error) {
 	var params = Params{
 		"Action":                   "Authorize",
 		"AmazonOrderReferenceId":   orderReferenceID,
@@ -63,7 +63,7 @@ func (amazonPay *AmazonPay) Authorize(orderReferenceID string, transactionID str
 }
 
 // GetAuthorizationDetails returns the total authorized amount for authorization status and authorization.
-func (amazonPay *AmazonPay) GetAuthorizationDetails(authorizationID string) (result AuthorizationDetails, err error) {
+func (amazonPay *AmazonPay) GetAuthorizationDetails(authorizationID string) (result GetAuthorizationDetailsResponse, err error) {
 	var params = Params{
 		"Action":                "GetAuthorizationDetails",
 		"AmazonAuthorizationId": authorizationID,
@@ -81,7 +81,7 @@ type CaptureInput struct {
 }
 
 // Capture request funds from the authorized payment method.
-func (amazonPay *AmazonPay) Capture(authorizationID string, transactionID string, captureAmount Price, input CaptureInput) (result CaptureDetails, err error) {
+func (amazonPay *AmazonPay) Capture(authorizationID string, transactionID string, captureAmount Price, input CaptureInput) (result CaptureResponse, err error) {
 	var params = Params{
 		"Action":                "Capture",
 		"AmazonAuthorizationId": authorizationID,
@@ -97,7 +97,7 @@ func (amazonPay *AmazonPay) Capture(authorizationID string, transactionID string
 }
 
 // GetCaptureDetails returns the detailed sales request status and the total amount refunded by sales request.
-func (amazonPay *AmazonPay) GetCaptureDetails(captureID string) (result CaptureDetails, err error) {
+func (amazonPay *AmazonPay) GetCaptureDetails(captureID string) (result GetCaptureDetailsResponse, err error) {
 	var params = Params{
 		"Action":          "GetCaptureDetails",
 		"AmazonCaptureId": captureID,
@@ -125,7 +125,7 @@ type RefundInput struct {
 }
 
 // Refund refund the funds requested
-func (amazonPay *AmazonPay) Refund(captureID string, transactionID string, refundAmount Price, input RefundInput) (result RefundDetails, err error) {
+func (amazonPay *AmazonPay) Refund(captureID string, transactionID string, refundAmount Price, input RefundInput) (result RefundResponse, err error) {
 	var params = Params{
 		"Action":            "Refund",
 		"AmazonCaptureId":   captureID,
@@ -141,7 +141,7 @@ func (amazonPay *AmazonPay) Refund(captureID string, transactionID string, refun
 }
 
 // GetRefundDetails get refund details
-func (amazonPay *AmazonPay) GetRefundDetails(refundID string) (result RefundDetails, err error) {
+func (amazonPay *AmazonPay) GetRefundDetails(refundID string) (result GetRefundDetailsResponse, err error) {
 	var params = Params{
 		"Action":         "GetRefundDetails",
 		"AmazonRefundId": refundID,
