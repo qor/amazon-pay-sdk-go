@@ -103,5 +103,5 @@ func (amazonPay *AmazonPay) Sign(message string) string {
 	key := []byte(amazonPay.Config.SecretKey)
 	h := hmac.New(sha256.New, key)
 	h.Write([]byte(message))
-	return strings.TrimRight(base64.StdEncoding.EncodeToString(h.Sum(nil)), "=")
+	return url.QueryEscape(base64.StdEncoding.EncodeToString(h.Sum(nil)))
 }
