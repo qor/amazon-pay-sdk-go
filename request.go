@@ -67,7 +67,6 @@ func (amazonPay *AmazonPay) Post(params Params, response interface{}) error {
 	if err == nil {
 		defer resp.Body.Close()
 		data, err = ioutil.ReadAll(resp.Body)
-		fmt.Println(string(data))
 		if resp.StatusCode == 200 {
 			if response != nil {
 				err = xml.Unmarshal([]byte(data), response)
