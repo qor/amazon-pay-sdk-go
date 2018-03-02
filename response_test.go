@@ -90,3 +90,23 @@ func TestAuthorizeResponse(t *testing.T) {
 
 	fmt.Printf("%#v", detail)
 }
+
+func TestErrorResponse(t *testing.T) {
+	resp := `<ErrorResponse xmlns="http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01">
+	<Error>
+	<Type>Sender</Type>
+	<Code>DuplicateReferenceId</Code>
+	<Message>Your Capture request could not be processed because an Authorize request with the ReferenceId 226 already exists.</Message>
+	</Error>
+	<RequestId>9547ad10-46da-4759-b37c-82ad02b0c1af</RequestId>
+	</ErrorResponse>`
+
+	detail := APIError{}
+	if err := xml.Unmarshal([]byte(resp), &detail); err != nil {
+		t.Errorf("no error should get when unmarshal order reference detail, but got %v", err)
+	}
+
+	if detail.Code != "DuplicateReferenceId" {
+		t.Errorf("Error not decoded")
+	}
+}

@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -67,7 +68,6 @@ func (amazonPay *AmazonPay) Post(params Params, response interface{}) error {
 	if err == nil {
 		defer resp.Body.Close()
 		data, err = ioutil.ReadAll(resp.Body)
-		fmt.Println(string(data))
 		if resp.StatusCode == 200 {
 			if response != nil {
 				err = xml.Unmarshal([]byte(data), response)
@@ -77,6 +77,7 @@ func (amazonPay *AmazonPay) Post(params Params, response interface{}) error {
 			if err = xml.Unmarshal([]byte(data), &apiError); err == nil {
 				return apiError
 			}
+			return errors.New("Get error: " + string(data))
 		}
 	}
 
