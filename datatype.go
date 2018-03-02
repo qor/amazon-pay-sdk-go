@@ -96,13 +96,13 @@ type Address struct {
 
 // AuthorizationDetails details and status of the authorization object, including sales charge amount.
 type AuthorizationDetails struct {
-	AmazonAuthorizationID    string
-	AuthorizationReferenceID string
+	AmazonAuthorizationID    string `xml:"AmazonAuthorizationId"`
+	AuthorizationReferenceID string `xml:"AuthorizationReferenceId"`
 	SellerAuthorizationNote  string
 	AuthorizationAmount      Price
 	CaptureAmount            Price
 	AuthorizationFee         Price
-	IDList                   string
+	IDList                   []string `xml:"IdList"`
 	CreationTimestamp        *time.Time
 	ExpirationTimestamp      *time.Time
 	AuthorizationStatus      Status
@@ -120,13 +120,13 @@ type Buyer struct {
 
 // CaptureDetails the details of the sales claim object and its current state.
 type CaptureDetails struct {
-	AmazonCaptureID    string
-	CaptureReferenceID string
+	AmazonCaptureID    string `xml:"AmazonCaptureId"`
+	CaptureReferenceID string `xml:"CaptureReferenceId"`
 	SellerCaptureNote  string
 	CaptureAmount      Price
 	RefundAmount       Price
 	CaptureFee         Price
-	IDList             string
+	IDList             []string `xml:"IdList"`
 	CreationTimestamp  *time.Time
 	CaptureStatus      Status
 	SoftDescriptor     string
@@ -134,7 +134,7 @@ type CaptureDetails struct {
 
 // Constraint represents a mistake or error information of a Billing Agreement or Order Reference object.
 type Constraint struct {
-	ConstraintID string
+	ConstraintID string `xml:"ConstraintId"`
 	Description  string
 }
 
@@ -147,18 +147,18 @@ type Destination struct {
 // OrderReferenceAttributes attribute of the Order Reference object specified by the seller.
 type OrderReferenceAttributes struct {
 	OrderTotal            OrderTotal
-	PlatformID            string
+	PlatformID            string `xml:"PlatformId"`
 	SellerNote            string
 	SellerOrderAttributes SellerOrderAttributes
 }
 
 // OrderReferenceDetails details and current state of the Order Reference object.
 type OrderReferenceDetails struct {
-	AmazonOrderReferenceID string
+	AmazonOrderReferenceID string `xml:"AmazonOrderReferenceId"`
 	Buyer                  Buyer
 	OrderTotal             OrderTotal
 	SellerNote             string
-	PlatformID             string
+	PlatformID             string `xml:"PlatformId"`
 	Destination            Destination
 	ReleaseEnvironment     string
 	SellerOrderAttributes  SellerOrderAttributes
@@ -166,7 +166,7 @@ type OrderReferenceDetails struct {
 	Constraints            []Constraint
 	CreationTimestamp      *time.Time
 	ExpirationTimestamp    *time.Time
-	IDList                 string
+	IDList                 []string `xml:"IdList"`
 }
 
 // OrderReferenceStatus the current state of the Order Reference object.
@@ -191,8 +191,8 @@ type Price struct {
 
 // RefundDetails details and the current state of the refund object.
 type RefundDetails struct {
-	AmazonRefundID    string
-	RefundReferenceID string
+	AmazonRefundID    string `xml:"AmazonRefundId"`
+	RefundReferenceID string `xml:"RefundReferenceId"`
 	SellerRefundNote  string
 	RefundType        string
 	RefundAmount      Price
@@ -204,7 +204,7 @@ type RefundDetails struct {
 
 // SellerOrderAttributes provides detailed information on the Order Reference object
 type SellerOrderAttributes struct {
-	SellerOrderID     string
+	SellerOrderID     string `xml:"SellerOrderId"`
 	StoreName         string
 	CustomInformation string
 }
