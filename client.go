@@ -147,11 +147,11 @@ type RefundInput struct {
 }
 
 // Refund refund the funds requested
-func (amazonPay *AmazonPay) Refund(captureID string, refundReferenceId string, refundAmount Price, input RefundInput) (result RefundResponse, err error) {
+func (amazonPay *AmazonPay) Refund(captureID string, refundReferenceID string, refundAmount Price, input RefundInput) (result RefundResponse, err error) {
 	var params = Params{
 		"Action":            "Refund",
 		"AmazonCaptureId":   captureID,
-		"RefundReferenceId": refundReferenceId,
+		"RefundReferenceId": refundReferenceID,
 	}
 
 	updateParams(&params, "RefundAmount", refundAmount)
