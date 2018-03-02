@@ -129,6 +129,17 @@ func (amazonPay *AmazonPay) CloseOrderReference(orderReferenceID string, closure
 	return amazonPay.Post(params, nil)
 }
 
+// CancelOrderReference Cancels a previously confirmed order reference.
+func (amazonPay *AmazonPay) CancelOrderReference(orderReferenceID string, reason string) error {
+	var params = Params{
+		"Action":                 "CancelOrderReference",
+		"AmazonOrderReferenceId": orderReferenceID,
+		"CancelationReason":      reason,
+	}
+
+	return amazonPay.Post(params, nil)
+}
+
 // RefundInput refund input struct
 type RefundInput struct {
 	SellerRefundNote string
