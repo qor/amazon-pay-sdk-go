@@ -185,8 +185,8 @@ type OrderTotal struct {
 
 // Price currency type and amount.
 type Price struct {
-	Amount      string
-	CurrecyCode string
+	Amount       string
+	CurrencyCode string
 }
 
 // RefundDetails details and the current state of the refund object.
