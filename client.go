@@ -47,11 +47,11 @@ type AuthorizeInput struct {
 }
 
 // Authorize process secures the funds specified for the payment method stored in the Order Reference.
-func (amazonPay *AmazonPay) Authorize(orderReferenceID string, transactionID string, amount Price, input AuthorizeInput) (result AuthorizeResponse, err error) {
+func (amazonPay *AmazonPay) Authorize(orderReferenceID string, authorizationReferenceID string, amount Price, input AuthorizeInput) (result AuthorizeResponse, err error) {
 	var params = Params{
 		"Action":                   "Authorize",
 		"AmazonOrderReferenceId":   orderReferenceID,
-		"AuthorizationReferenceId": transactionID,
+		"AuthorizationReferenceId": authorizationReferenceID,
 	}
 
 	updateParams(&params, "AuthorizationAmount", amount)
@@ -92,11 +92,11 @@ type CaptureInput struct {
 }
 
 // Capture request funds from the authorized payment method.
-func (amazonPay *AmazonPay) Capture(authorizationID string, transactionID string, captureAmount Price, input CaptureInput) (result CaptureResponse, err error) {
+func (amazonPay *AmazonPay) Capture(authorizationID string, captureReferenceID string, captureAmount Price, input CaptureInput) (result CaptureResponse, err error) {
 	var params = Params{
 		"Action":                "Capture",
 		"AmazonAuthorizationId": authorizationID,
-		"CaptureReferenceId":    transactionID,
+		"CaptureReferenceId":    captureReferenceID,
 	}
 
 	updateParams(&params, "CaptureAmount", captureAmount)
@@ -147,11 +147,11 @@ type RefundInput struct {
 }
 
 // Refund refund the funds requested
-func (amazonPay *AmazonPay) Refund(captureID string, transactionID string, refundAmount Price, input RefundInput) (result RefundResponse, err error) {
+func (amazonPay *AmazonPay) Refund(captureID string, refundReferenceId string, refundAmount Price, input RefundInput) (result RefundResponse, err error) {
 	var params = Params{
 		"Action":            "Refund",
 		"AmazonCaptureId":   captureID,
-		"RefundReferenceId": transactionID,
+		"RefundReferenceId": refundReferenceId,
 	}
 
 	updateParams(&params, "RefundAmount", refundAmount)
