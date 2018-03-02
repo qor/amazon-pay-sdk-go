@@ -74,6 +74,17 @@ func (amazonPay *AmazonPay) GetAuthorizationDetails(authorizationID string) (res
 	return result, err
 }
 
+// CloseAuthorization Close authorization
+func (amazonPay *AmazonPay) CloseAuthorization(authorizationID string, closureReason string) error {
+	var params = Params{
+		"Action":                "CloseAuthorization",
+		"AmazonAuthorizationId": authorizationID,
+		"ClosureReason":         closureReason,
+	}
+
+	return amazonPay.Post(params, nil)
+}
+
 // CaptureInput capture input struct
 type CaptureInput struct {
 	SellerCaptureNote string
