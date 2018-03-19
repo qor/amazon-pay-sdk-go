@@ -22,15 +22,25 @@ type IPN struct {
 	Signature        string
 	SigningCertURL   string
 	UnsubscribeURL   string
-	Message          struct {
-		NotificationReferenceID string `json:"NotificationReferenceId"`
-		NotificationType        string
-		SellerID                string `json:"SellerId"`
-		ReleaseEnvironment      string
-		Version                 string
-		NotificationData        string
-		Timestamp               string
-	}
+	Message          string
+}
+
+// Message ipn message struct
+type Message struct {
+	NotificationReferenceID string `json:"NotificationReferenceId"`
+	NotificationType        string
+	SellerID                string `json:"SellerId"`
+	ReleaseEnvironment      string
+	Version                 string
+	NotificationData        string
+	Timestamp               string
+}
+
+// GetMessage get IPN message
+func (ipn IPN) GetMessage() (Message, error) {
+	var msg Message
+	err := json.Unmarshal([]byte(ipn.Message), &msg)
+	return msg, err
 }
 
 // VerifyIPNRequest verify IPN request message
@@ -74,18 +84,22 @@ func verifyCertSubject(ipn *IPN, cert *x509.Certificate) bool {
 func verifySignedString(ipn *IPN, cert *x509.Certificate) bool {
 	canonicalString := fmt.Sprintf("")
 
-	result, _ := json.Marshal(ipn.Message)
-	canonicalString += "Message\n" + string(result) + "\n"
+	if ipn.Message != "" {
+		canonicalString += "Message\n" + ipn.Message + "\n"
+	}
 
 	if ipn.MessageID != "" {
 		canonicalString += "MessageId\n" + ipn.MessageID + "\n"
 	}
+
 	if ipn.Timestamp != "" {
 		canonicalString += "Timestamp\n" + ipn.Timestamp + "\n"
 	}
+
 	if ipn.TopicArn != "" {
 		canonicalString += "TopicArn\n" + ipn.TopicArn + "\n"
 	}
+
 	if ipn.Type != "" {
 		canonicalString += "Type\n" + ipn.Type + "\n"
 	}
