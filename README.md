@@ -60,6 +60,14 @@ func main() {
 }
 ```
 
+## Verify IPN Notification
+
+Verify ipn notification
+
+```go
+amazonpay.VerifyIPNRequest(req)
+```
+
 ## Demo
 
 We have deployed a demo that integrated Amazon Pay sandbox mode, visit it here: [https://demo.getqor.com](https://demo.getqor.com)
