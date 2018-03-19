@@ -1,11 +1,15 @@
 package amazonpay
 
 import (
+	"crypto"
+	"crypto/rsa"
+	"crypto/sha1"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 // IPN ipn message
@@ -13,7 +17,7 @@ type IPN struct {
 	Type             string
 	MessageID        string `json:"MessageId"`
 	TopicArn         string
-	Timestamp        *time.Time
+	Timestamp        string
 	SignatureVersion string
 	Signature        string
 	SigningCertURL   string
@@ -25,7 +29,7 @@ type IPN struct {
 		ReleaseEnvironment      string
 		Version                 string
 		NotificationData        string
-		Timestamp               *time.Time
+		Timestamp               string
 	}
 }
 
@@ -68,5 +72,27 @@ func verifyCertSubject(ipn *IPN, cert *x509.Certificate) bool {
 }
 
 func verifySignedString(ipn *IPN, cert *x509.Certificate) bool {
-	return false
+	canonicalString := fmt.Sprintf("")
+
+	result, _ := json.Marshal(ipn.Message)
+	canonicalString += "Message\n" + string(result) + "\n"
+
+	if ipn.MessageID != "" {
+		canonicalString += "MessageId\n" + ipn.MessageID + "\n"
+	}
+	if ipn.Timestamp != "" {
+		canonicalString += "Timestamp\n" + ipn.Timestamp + "\n"
+	}
+	if ipn.TopicArn != "" {
+		canonicalString += "TopicArn\n" + ipn.TopicArn + "\n"
+	}
+	if ipn.Type != "" {
+		canonicalString += "Type\n" + ipn.Type + "\n"
+	}
+
+	ds, _ := base64.StdEncoding.DecodeString(ipn.Signature)
+	h := sha1.New()
+	h.Write([]byte(canonicalString))
+	digest := h.Sum(nil)
+	return rsa.VerifyPKCS1v15(cert.PublicKey.(*rsa.PublicKey), crypto.SHA1, digest, ds) == nil
 }
