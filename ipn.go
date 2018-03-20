@@ -45,6 +45,26 @@ func (ipn IPN) GetMessage() (Message, error) {
 	return msg, err
 }
 
+// GetNotification get notification message
+func (ipn IPN) GetNotification() (interface{}, error) {
+	msg, err := ipn.GetMessage()
+
+	if err == nil {
+		switch msg.NotificationType {
+		case "OrderReferenceNotification":
+			return msg.GetOrderReferenceNotification()
+		case "PaymentAuthorize":
+			return msg.GetAuthorizationNotification()
+		case "PaymentCapture":
+			return msg.GetCaptureNotification()
+		case "PaymentRefund":
+			return msg.GetRefundNotification()
+		}
+	}
+
+	return nil, err
+}
+
 // GetOrderReferenceNotification get order reference notification data (notification type: OrderReferenceNotification)
 func (msg Message) GetOrderReferenceNotification() (OrderReferenceNotification, error) {
 	var notification OrderReferenceNotification
