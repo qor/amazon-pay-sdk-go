@@ -216,3 +216,23 @@ type Status struct {
 	ReasonCode          string
 	ReasonDescription   string
 }
+
+// OrderReferenceNotification order reference notification data
+type OrderReferenceNotification struct {
+	OrderReference OrderReferenceDetails
+}
+
+// AuthorizationNotification authorization notification data
+type AuthorizationNotification struct {
+	AuthorizationDetails AuthorizationDetails
+}
+
+// CaptureNotification capture notification
+type CaptureNotification struct {
+	CaptureDetails CaptureDetails
+}
+
+// RefundNotification refund notification
+type RefundNotification struct {
+	RefundDetails RefundDetails
+}

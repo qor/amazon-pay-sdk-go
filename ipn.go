@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -42,6 +43,34 @@ func (ipn IPN) GetMessage() (Message, error) {
 	var msg Message
 	err := json.Unmarshal([]byte(ipn.Message), &msg)
 	return msg, err
+}
+
+// GetOrderReferenceNotification get order reference notification data (notification type: OrderReferenceNotification)
+func (msg Message) GetOrderReferenceNotification() (OrderReferenceNotification, error) {
+	var notification OrderReferenceNotification
+	err := xml.Unmarshal([]byte(msg.NotificationData), &notification)
+	return notification, err
+}
+
+// GetAuthorizationNotification get authorization notification data (notification type: PaymentAuthorize)
+func (msg Message) GetAuthorizationNotification() (AuthorizationNotification, error) {
+	var notification AuthorizationNotification
+	err := xml.Unmarshal([]byte(msg.NotificationData), &notification)
+	return notification, err
+}
+
+// GetCaptureNotification get capture notification data (notification type: PaymentCapture)
+func (msg Message) GetCaptureNotification() (CaptureNotification, error) {
+	var notification CaptureNotification
+	err := xml.Unmarshal([]byte(msg.NotificationData), &notification)
+	return notification, err
+}
+
+// GetRefundNotification get refund notification data (notification type: PaymentRefund)
+func (msg Message) GetRefundNotification() (RefundNotification, error) {
+	var notification RefundNotification
+	err := xml.Unmarshal([]byte(msg.NotificationData), &notification)
+	return notification, err
 }
 
 // VerifyIPNRequest verify IPN request message

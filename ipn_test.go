@@ -23,6 +23,11 @@ func TestIPN(t *testing.T) {
 	if err := json.Unmarshal([]byte(msg), &ipn); err == nil {
 		if msg, err := ipn.GetMessage(); err == nil {
 			fmt.Println(msg)
+			if data, err := msg.GetOrderReferenceNotification(); err == nil {
+				fmt.Printf("%#v \n", data)
+			} else {
+				t.Errorf("No error should happen when get order reference notification, but got %v", err)
+			}
 		} else {
 			t.Errorf("No error should happen when get message, but got %v", err)
 		}
