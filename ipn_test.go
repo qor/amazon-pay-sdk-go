@@ -61,3 +61,11 @@ User-Agent: Amazon Simple Notification Service Agent
 
 	fmt.Println(msg)
 }
+
+func TestPem(t *testing.T) {
+	cert := getCert(&IPN{SigningCertURL: "https://sns.us-west-2.amazonaws.com/SimpleNotificationService-433026a4050d206028891664da859041.pem"})
+
+	if cert == nil {
+		t.Error("No Error should happen when download cert")
+	}
+}

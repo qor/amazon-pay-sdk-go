@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -59,7 +60,7 @@ func VerifyIPNRequest(req *http.Request) (*IPN, bool) {
 		return nil, false
 	}
 
-	if cert := getCert(&ipn); verifyCertSubject(&ipn, cert) && verifySignedString(&ipn, cert) {
+	if cert := getCert(&ipn); cert != nil && verifyCertSubject(&ipn, cert) && verifySignedString(&ipn, cert) {
 		return &ipn, true
 	}
 
@@ -69,7 +70,8 @@ func VerifyIPNRequest(req *http.Request) (*IPN, bool) {
 func getCert(ipn *IPN) *x509.Certificate {
 	if resp, err := http.Get(ipn.SigningCertURL); err == nil {
 		if body, err := ioutil.ReadAll(resp.Body); err == nil {
-			if cert, err := x509.ParseCertificate(body); err == nil {
+			block, _ := pem.Decode([]byte(body))
+			if cert, err := x509.ParseCertificate(block.Bytes); err == nil {
 				return cert
 			}
 		}
