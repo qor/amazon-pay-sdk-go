@@ -6,17 +6,7 @@ import (
 )
 
 func TestIPN(t *testing.T) {
-	msg := `POST / HTTP/1.1
-x-amz-sns-message-type: Notification
-x-amz-sns-message-id: 0000000-0000-00000-0000-00000EXAMPLE
-x-amz-sns-topic-arn: arn:aws:sns:EXAMPLE:11111EXAMPLE:TestTopic
-x-amz-sns-subscription-arn: arn:aws:sns:EXAMPLE:11111EXAMPLE:TestTopic: EXAMPLE
-Content-Length: 999
-Content-Type: text/plain; charset=UTF-8
-Host: ec2-EXAMPLE.compute-1.amazonaws.com
-Connection: Keep-Alive
-User-Agent: Amazon Simple Notification Service Agent
-{
+	msg := `{
     Type : Notification,
     MessageId : xxxxxx-xxxx-xxxx-xxxx-xxxxxEXAMPLE,
     TopicArn : arn:aws:sns:EXAMPLE:11111EXAMPLE:TestTopic,
@@ -67,5 +57,7 @@ func TestPem(t *testing.T) {
 
 	if cert == nil {
 		t.Error("No Error should happen when download cert")
+	} else if !verifyCertSubject(cert) {
+		t.Error("Cert's subject should be correct")
 	}
 }

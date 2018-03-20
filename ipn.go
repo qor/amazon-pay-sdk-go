@@ -60,7 +60,7 @@ func VerifyIPNRequest(req *http.Request) (*IPN, bool) {
 		return nil, false
 	}
 
-	if cert := getCert(&ipn); cert != nil && verifyCertSubject(&ipn, cert) && verifySignedString(&ipn, cert) {
+	if cert := getCert(&ipn); cert != nil && verifyCertSubject(cert) && verifySignedString(&ipn, cert) {
 		return &ipn, true
 	}
 
@@ -79,7 +79,7 @@ func getCert(ipn *IPN) *x509.Certificate {
 	return nil
 }
 
-func verifyCertSubject(ipn *IPN, cert *x509.Certificate) bool {
+func verifyCertSubject(cert *x509.Certificate) bool {
 	return cert.Subject.CommonName == "sns.amazonaws.com"
 }
 
