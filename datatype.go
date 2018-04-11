@@ -8,6 +8,13 @@ import (
 // Response Types
 ////////////////////////////////////////////////////////////////////////////////
 
+// Profile user profile
+type Profile struct {
+	UserID string `json:"user_id"`
+	Name   string `json:"name"`
+	Email  string `json:"email"`
+}
+
 // ResponseMetadata respones meta data
 type ResponseMetadata struct {
 	RequestID string `xml:"RequestId"`

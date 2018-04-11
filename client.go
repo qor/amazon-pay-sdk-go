@@ -1,5 +1,28 @@
 package amazonpay
 
+import (
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+)
+
+// GetProfile get user profile
+func (amazonPay *AmazonPay) GetProfile(token string) (profile Profile, err error) {
+	req, _ := http.NewRequest("GET", "https://api.sandbox.amazon.com/user/profile", nil)
+	req.Header.Add("Authorization", "bearer "+token)
+	resp, err := http.DefaultClient.Do(req)
+
+	if err == nil {
+		defer resp.Body.Close()
+		contents, err := ioutil.ReadAll(resp.Body)
+		if err == nil {
+			err = json.Unmarshal(contents, &profile)
+		}
+		return profile, err
+	}
+	return profile, err
+}
+
 // SetOrderReferenceDetails set order details such as order amount and explanation in Order Reference
 func (amazonPay *AmazonPay) SetOrderReferenceDetails(orderReferenceID string, attrs OrderReferenceAttributes) (result SetOrderReferenceDetailsResult, err error) {
 	var params = Params{
