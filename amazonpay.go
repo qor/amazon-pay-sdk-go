@@ -7,6 +7,13 @@ var MWSServiceURLs = map[string]string{
 	"jp": "mws.amazonservices.jp",
 }
 
+var (
+	// OAuthEndpoint oauth endpoint
+	OAuthEndpoint = "https://api.amazon.com"
+	// OAuthSandboxEndpoint oauth endpoint for sandbox env
+	OAuthSandboxEndpoint = "https://api.sandbox.amazon.com"
+)
+
 // RegionMappings region mapping
 var RegionMappings = map[string]string{
 	"de": "eu",
@@ -22,15 +29,16 @@ type AmazonPay struct {
 
 // Config Amazon Pay Config
 type Config struct {
-	MerchantID   string
-	AccessKey    string
-	SecretKey    string
-	Sandbox      bool
-	Region       string
-	CurrencyCode string
-	Endpoint     string
-	ModePath     string
-	APIVersion   string
+	MerchantID    string
+	AccessKey     string
+	SecretKey     string
+	Sandbox       bool
+	Region        string
+	CurrencyCode  string
+	Endpoint      string
+	OAuthEndpoint string
+	ModePath      string
+	APIVersion    string
 }
 
 // New initialize amazon pay
@@ -60,6 +68,14 @@ func New(config *Config) *AmazonPay {
 			config.ModePath = "OffAmazonPayments_Sandbox"
 		} else {
 			config.ModePath = "OffAmazonPayments"
+		}
+	}
+
+	if config.OAuthEndpoint == "" {
+		if config.Sandbox {
+			config.OAuthEndpoint = OAuthSandboxEndpoint
+		} else {
+			config.OAuthEndpoint = OAuthEndpoint
 		}
 	}
 

@@ -2,13 +2,15 @@ package amazonpay
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 // GetProfile get user profile
 func (amazonPay *AmazonPay) GetProfile(token string) (profile Profile, err error) {
-	req, _ := http.NewRequest("GET", "https://api.sandbox.amazon.com/user/profile", nil)
+	fmt.Println(amazonPay.OAuthEndpoint + "/user/profile")
+	req, _ := http.NewRequest("GET", amazonPay.OAuthEndpoint+"/user/profile", nil)
 	req.Header.Add("Authorization", "bearer "+token)
 	resp, err := http.DefaultClient.Do(req)
 
