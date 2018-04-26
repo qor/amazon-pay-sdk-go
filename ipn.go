@@ -59,6 +59,8 @@ func (ipn IPN) GetNotification() (interface{}, error) {
 			return msg.GetCaptureNotification()
 		case "PaymentRefund":
 			return msg.GetRefundNotification()
+		case "BillingAgreementNotification":
+			return msg.GetBillingAgreementNotification()
 		}
 	}
 
@@ -89,6 +91,13 @@ func (msg Message) GetCaptureNotification() (CaptureNotification, error) {
 // GetRefundNotification get refund notification data (notification type: PaymentRefund)
 func (msg Message) GetRefundNotification() (RefundNotification, error) {
 	var notification RefundNotification
+	err := xml.Unmarshal([]byte(msg.NotificationData), &notification)
+	return notification, err
+}
+
+// GetBillingAgreementNotification get billing agreement notification data (notification type: BillingAgreementNotification)
+func (msg Message) GetBillingAgreementNotification() (BillingAgreementNotification, error) {
+	var notification BillingAgreementNotification
 	err := xml.Unmarshal([]byte(msg.NotificationData), &notification)
 	return notification, err
 }

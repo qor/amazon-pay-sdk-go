@@ -206,3 +206,115 @@ func (amazonPay *AmazonPay) GetRefundDetails(refundID string) (result GetRefundD
 	err = amazonPay.Post(params, &result)
 	return result, err
 }
+
+// AuthorizeOnBillingAgreementInput authorize on billing agreement input struct
+type AuthorizeOnBillingAgreementInput struct {
+	SellerAuthorizationNote string
+	TransactionTimeout      uint
+	CaptureNow              bool
+	SoftDecriptor           string
+	SellerNote              string
+	PlatformID              string `json:"PlatformId"`
+	SellerOrderAttributes   SellerOrderAttributes
+	InheritShippingAddress  bool
+}
+
+// AuthorizeOnBillingAgreement process secures the funds specified for the payment method stored in the Billing Agreement.
+func (amazonPay *AmazonPay) AuthorizeOnBillingAgreement(billingAgreementID string, authorizationReferenceID string, amount Price, input AuthorizeOnBillingAgreementInput) (result AuthorizeOnBillingAgreementResponse, err error) {
+	var params = Params{
+		"Action":                   "AuthorizeOnBillingAgreement",
+		"AmazonBillingAgreementId": billingAgreementID,
+		"AuthorizationReferenceId": authorizationReferenceID,
+	}
+
+	updateParams(&params, "AuthorizationAmount", amount)
+	updateParams(&params, "", input)
+
+	err = amazonPay.Post(params, &result)
+
+	return result, err
+}
+
+// CloseBillingAgreement Close billing agreement
+func (amazonPay *AmazonPay) CloseBillingAgreement(billingAgreementID string, closureReason string) error {
+	var params = Params{
+		"Action":                   "CloseBillingAgreement",
+		"AmazonBillingAgreementId": billingAgreementID,
+		"ClosureReason":            closureReason,
+	}
+
+	return amazonPay.Post(params, nil)
+}
+
+// ConfirmBillingAgreement confirm billing agreement
+func (amazonPay *AmazonPay) ConfirmBillingAgreement(billingAgreementID string) error {
+	var params = Params{
+		"Action":                   "ConfirmBillingAgreement",
+		"AmazonBillingAgreementId": billingAgreementID,
+	}
+
+	return amazonPay.Post(params, nil)
+}
+
+// CreateOrderReferenceForIdInput create order reference for id input struct
+type CreateOrderReferenceForIdInput struct {
+	InheritShippingAddress   bool
+	ConfirmNow               bool
+	OrderReferenceAttributes OrderReferenceAttributes
+}
+
+// CreateOrderReferenceForId creates an order reference.
+func (amazonPay *AmazonPay) CreateOrderReferenceForId(id string, idType string, input CreateOrderReferenceForIdInput) (result CreateOrderReferenceForIdResponse, err error) {
+	var params = Params{
+		"Action": "CreateOrderReferenceForId",
+		"Id":     id,
+		"IdType": idType,
+	}
+
+	updateParams(&params, "", input)
+
+	err = amazonPay.Post(params, &result)
+
+	return result, err
+}
+
+// GetBillingAgreementDetails returns the details and current state of the Billing Agreement object.
+func (amazonPay *AmazonPay) GetBillingAgreementDetails(billingAgreementID string, addressConsentToken string) (result GetBillingAgreementDetailsResponse, err error) {
+	var params = Params{
+		"Action":                   "GetBillingAgreementDetails",
+		"AmazonBillingAgreementId": billingAgreementID,
+		"AddressConsentToken":      addressConsentToken,
+	}
+
+	err = amazonPay.Post(params, &result)
+
+	return result, err
+}
+
+// SetBillingAgreementDetails set billing agreement such as a description of the agreement and other information about the merchant.
+func (amazonPay *AmazonPay) SetBillingAgreementDetails(billingAgreementID string, attrs BillingAgreementAttributes) (result SetBillingAgreementDetailsResponse, err error) {
+	var params = Params{
+		"Action":                   "SetBillingAgreementDetails",
+		"AmazonBillingAgreementId": billingAgreementID,
+	}
+
+	err = updateParams(&params, "BillingAgreementAttributes", attrs)
+
+	if err == nil {
+		err = amazonPay.Post(params, &result)
+	}
+
+	return result, err
+}
+
+// ValidateBillingAgreement validates the status of the BillingAgreement object and the payment method associated with it.
+func (amazonPay *AmazonPay) ValidateBillingAgreement(billingAgreementID string) (result ValidateBillingAgreementResponse, err error) {
+	var params = Params{
+		"Action":                   "ValidateBillingAgreement",
+		"AmazonBillingAgreementId": billingAgreementID,
+	}
+
+	err = amazonPay.Post(params, &result)
+
+	return result, err
+}
