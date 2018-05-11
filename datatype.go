@@ -18,7 +18,7 @@ type Profile struct {
 // OAuthResponseError oauth error response
 type OAuthResponseError struct {
 	ErrorDescription string `json:"error_description"`
-	Error            string `json:"invalid_token"`
+	Error            string `json:"error"`
 }
 
 // ResponseMetadata respones meta data
