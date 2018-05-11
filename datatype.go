@@ -15,6 +15,12 @@ type Profile struct {
 	Email  string `json:"email"`
 }
 
+// OAuthResponseError oauth error response
+type OAuthResponseError struct {
+	ErrorDescription string `json:"error_description"`
+	Error            string `json:"invalid_token"`
+}
+
 // ResponseMetadata respones meta data
 type ResponseMetadata struct {
 	RequestID string `xml:"RequestId"`

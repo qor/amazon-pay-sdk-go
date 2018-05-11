@@ -2,6 +2,7 @@ package amazonpay
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -17,6 +18,14 @@ func (amazonPay *AmazonPay) GetProfile(token string) (profile Profile, err error
 	if err == nil {
 		defer resp.Body.Close()
 		contents, err := ioutil.ReadAll(resp.Body)
+
+		respErr := OAuthResponseError{}
+		if err = json.Unmarshal(contents, &respErr); err == nil {
+			if respErr.Error != "" {
+				return profile, errors.New(respErr.ErrorDescription)
+			}
+		}
+
 		if err == nil {
 			err = json.Unmarshal(contents, &profile)
 		}
