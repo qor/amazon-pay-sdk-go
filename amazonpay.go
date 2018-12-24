@@ -22,6 +22,24 @@ var RegionMappings = map[string]string{
 	"jp": "jp",
 }
 
+type AmazonPayService interface {
+	GetProfile(token string) (profile Profile, err error)
+	SetOrderReferenceDetails(orderReferenceID string, attrs OrderReferenceAttributes) (result SetOrderReferenceDetailsResult, err error)
+	ConfirmOrderReference(orderReferenceID string) error
+	GetOrderReferenceDetails(orderReferenceID string, addressToken string) (result GetOrderReferenceDetailsResponse, err error)
+	Authorize(orderReferenceID string, authorizationReferenceID string, amount Price, input AuthorizeInput) (result AuthorizeResponse, err error)
+	GetAuthorizationDetails(authorizationID string) (result GetAuthorizationDetailsResponse, err error)
+	CloseAuthorization(authorizationID string, closureReason string) error
+	Capture(authorizationID string, captureReferenceID string, captureAmount Price, input CaptureInput) (result CaptureResponse, err error)
+	GetCaptureDetails(captureID string) (result GetCaptureDetailsResponse, err error)
+	CloseOrderReference(orderReferenceID string, closureReason string) error
+	CancelOrderReference(orderReferenceID string, reason string) error
+	Refund(captureID string, refundReferenceID string, refundAmount Price, input RefundInput) (result RefundResponse, err error)
+	GetRefundDetails(refundID string) (result GetRefundDetailsResponse, err error)
+	Post(params Params, response interface{}) error
+	Sign(message string) string
+}
+
 // AmazonPay amazon pay
 type AmazonPay struct {
 	*Config
@@ -42,7 +60,7 @@ type Config struct {
 }
 
 // New initialize amazon pay
-func New(config *Config) *AmazonPay {
+func New(config *Config) AmazonPayService {
 	if config == nil {
 		config = &Config{}
 	}
