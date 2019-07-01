@@ -46,6 +46,13 @@ type AmazonPay struct {
 }
 
 // Config Amazon Pay Config
+//
+// Note on 'PlatformID':
+//   According to AmazonPay docs, 'PlatformID' is the MerchatID, which is also referenced as SellerID
+//   https://developer.amazon.com/ja/docs/amazon-pay-api/setorderattributes.html
+//
+//   But, in real life business, AmazonPay vendor may provide a different PlatformID for tracking incentives
+//   So you can set this seperately
 type Config struct {
 	MerchantID    string
 	AccessKey     string
@@ -57,6 +64,7 @@ type Config struct {
 	OAuthEndpoint string
 	ModePath      string
 	APIVersion    string
+	PlatformID    string
 }
 
 // New initialize amazon pay
