@@ -11,6 +11,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -117,15 +118,28 @@ func VerifyIPNRequest(req *http.Request) (*IPN, bool) {
 }
 
 func getCert(ipn *IPN) *x509.Certificate {
-	if resp, err := http.Get(ipn.SigningCertURL); err == nil {
-		if body, err := ioutil.ReadAll(resp.Body); err == nil {
-			block, _ := pem.Decode([]byte(body))
-			if cert, err := x509.ParseCertificate(block.Bytes); err == nil {
-				return cert
-			}
-		}
+	resp, err := http.Get(ipn.SigningCertURL)
+	if err != nil {
+		log.Printf("err: ipn get http response from signing cert URL with error %v\n", err)
+		return nil
 	}
-	return nil
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("err: ipn read http response from signing cert URL with error %v\n", err)
+		return nil
+	}
+	if resp.StatusCode >= http.StatusMultipleChoices /* 300 */ {
+		log.Printf("err: ipn http status code from signing cert URL is %v(not 2xx) with response %s\n", resp.StatusCode, string(body))
+		return nil
+	}
+
+	block, _ := pem.Decode(body)
+	cert, err := x509.ParseCertificate(block.Bytes)
+	if err != nil {
+		log.Printf("err: ipn parse http response from signing cert URL with error %v\n", err)
+		return nil
+	}
+	return cert
 }
 
 func verifyCertSubject(cert *x509.Certificate) bool {
