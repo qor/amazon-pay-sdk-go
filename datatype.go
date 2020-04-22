@@ -217,7 +217,7 @@ type RefundDetails struct {
 
 // SellerOrderAttributes provides detailed information on the Order Reference object
 type SellerOrderAttributes struct {
-	SellerOrderID     string `xml:"SellerOrderId"`
+	SellerOrderID     string `xml:"SellerOrderId" json:"SellerOrderId"`
 	StoreName         string
 	CustomInformation string
 }
