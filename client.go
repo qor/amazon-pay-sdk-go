@@ -76,7 +76,7 @@ func (amazonPay *AmazonPay) GetOrderReferenceDetails(orderReferenceID string, ad
 // AuthorizeInput authorize input struct
 type AuthorizeInput struct {
 	SellerAuthorizationNote string
-	TransactionTimedOut     uint
+	TransactionTimeout      uint
 	CaptureNow              bool
 	SoftDecriptor           string
 }
