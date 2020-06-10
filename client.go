@@ -65,7 +65,7 @@ func (amazonPay *AmazonPay) GetOrderReferenceDetails(orderReferenceID string, ad
 	var params = Params{
 		"Action":                 "GetOrderReferenceDetails",
 		"AmazonOrderReferenceId": orderReferenceID,
-		"AddressToken":           addressToken,
+		"AccessToken":             addressToken,
 	}
 
 	err = amazonPay.Post(params, &result)
