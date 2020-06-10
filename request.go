@@ -90,7 +90,7 @@ func (amazonPay *AmazonPay) buildPostURL(params Params) string {
 
 	for key, value := range params {
 		if str := fmt.Sprint(value); str != "" {
-			apiParams = append(apiParams, key+"="+url.QueryEscape(url.PathEscape(str)))
+			apiParams = append(apiParams, key+"="+url.QueryEscape(str))
 		}
 	}
 
