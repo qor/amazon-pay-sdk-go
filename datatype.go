@@ -90,6 +90,49 @@ type GetRefundDetailsResponse struct {
 	ResponseMetadata ResponseMetadata
 }
 
+// AuthorizeOnBillingAgreementResponse get authorize on billing agreement response
+type AuthorizeOnBillingAgreementResponse struct {
+	AuthorizeOnBillingAgreementResult struct {
+		AuthorizationDetails   AuthorizationDetails
+		AmazonOrderReferenceID string `xml:"AmazonOrderReferenceId"`
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// CreateOrderReferenceForIdResponse get Order Reference object.
+type CreateOrderReferenceForIdResponse struct {
+	CreateOrderReferenceForIdResult struct {
+		OrderReferenceDetails OrderReferenceDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// GetBillingAgreementDetailsResponse details and current state of the Billing Agreement object.
+type GetBillingAgreementDetailsResponse struct {
+	GetBillingAgreementDetailsResult struct {
+		BillingAgreementDetails BillingAgreementDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// SetBillingAgreementDetailsResponse set billing agreement detail
+type SetBillingAgreementDetailsResponse struct {
+	SetBillingAgreementDetailsResult struct {
+		BillingAgreementDetails BillingAgreementDetails
+	}
+	ResponseMetadata ResponseMetadata
+}
+
+// ValidateBillingAgreementResponse result of billing agreement validation.
+type ValidateBillingAgreementResponse struct {
+	ValidateBillingAgreementResult struct {
+		ValidationResult       string
+		FailureReasonCode      string
+		BillingAgreementStatus BillingAgreementStatus
+	}
+	ResponseMetadata ResponseMetadata
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Data Types
 ////////////////////////////////////////////////////////////////////////////////
@@ -230,6 +273,52 @@ type Status struct {
 	ReasonDescription   string
 }
 
+// BillingAgreementDetails details and current state of the billing agreement.
+type BillingAgreementDetails struct {
+	AmazonBillingAgreementID         string `xml:"AmazonBillingAgreementId"`
+	BillingAgreementLimits           BillingAgreementLimits
+	Buyer                            Buyer
+	SellerNote                       string
+	PlatformID                       string `xml:"PlatformId"`
+	Destination                      Destination
+	ReleaseEnvironment               string
+	SellerBillingAgreementAttributes SellerBillingAgreementAttributes
+	BillingAgreementStatus           BillingAgreementStatus
+	Constraints                      []Constraint
+	CreationTimestamp                *time.Time
+	BillingAgreementConsent          bool
+}
+
+// BillingAgreementLimits represents a billing agreement limits.
+type BillingAgreementLimits struct {
+	AmountLimitPerTimePeriod Price
+	TimePeriodStartDate      *time.Time
+	TimePeriodEndDate        *time.Time
+	CurrentRemainingBalance  Price
+}
+
+// SellerBillingAgreementAttributes attribute of the Seller Billing Agreement.
+type SellerBillingAgreementAttributes struct {
+	SellerBillingAgreementID string `xml:"SellerBillingAgreementId"`
+	StoreName                string
+	CustomInformation        string
+}
+
+// BillingAgreementStatus the current state of the Billing Agreement object.
+type BillingAgreementStatus struct {
+	State                string
+	LastUpdatedTimestamp *time.Time
+	ReasonCode           string
+	ReasonDescription    string
+}
+
+// BillingAgreementAttributes attribute of the Billing Agreement.
+type BillingAgreementAttributes struct {
+	PlatformID                       string `xml:"PlatformId"`
+	SellerNote                       string
+	SellerBillingAgreementAttributes SellerBillingAgreementAttributes
+}
+
 // OrderReferenceNotification order reference notification data
 type OrderReferenceNotification struct {
 	OrderReference OrderReferenceDetails
@@ -248,4 +337,9 @@ type CaptureNotification struct {
 // RefundNotification refund notification
 type RefundNotification struct {
 	RefundDetails RefundDetails
+}
+
+// BillingAgreementNotification billing agreement notification
+type BillingAgreementNotification struct {
+	BillingAgreementDetails BillingAgreementDetails
 }
