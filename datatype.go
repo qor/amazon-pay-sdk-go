@@ -53,7 +53,7 @@ type AuthorizeResponse struct {
 // GetAuthorizationDetailsResponse get authorization detail response
 type GetAuthorizationDetailsResponse struct {
 	GetAuthorizationDetailsResult struct {
-		AuthorizationDetails
+		AuthorizationDetails AuthorizationDetails
 	}
 	ResponseMetadata ResponseMetadata
 }
@@ -260,7 +260,7 @@ type RefundDetails struct {
 
 // SellerOrderAttributes provides detailed information on the Order Reference object
 type SellerOrderAttributes struct {
-	SellerOrderID     string `xml:"SellerOrderId"`
+	SellerOrderID     string `xml:"SellerOrderId" json:"SellerOrderId"`
 	StoreName         string
 	CustomInformation string
 }
