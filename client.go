@@ -78,7 +78,7 @@ type AuthorizeInput struct {
 	SellerAuthorizationNote string
 	TransactionTimeout      uint
 	CaptureNow              bool
-	SoftDecriptor           string
+	SoftDescriptor          string
 }
 
 // Authorize process secures the funds specified for the payment method stored in the Order Reference.
